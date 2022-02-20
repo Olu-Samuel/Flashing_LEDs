@@ -1,0 +1,2 @@
+# Flashing_LEDs
+Flashing LEDs in Assembly Language: Programming target in machine code can be daunting, and time consuming, thus need for assembly language. Assembly language allows the program to be written using mnemonic which is more human friendly. In special function register three registers are key to pic controller timer/counter; the TMR0, OPTION, and INTCON. TMR0 timer/counter allows external and internal clock pulses to be counted. This lab demonstrate this special function register feature
