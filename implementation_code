@@ -1,0 +1,78 @@
+; ---------------------------------------------------------------------- 
+; A program to flash LEDs 
+; LEDs which are connected to RB3 and RB4 are expected to light
+; simultaneouly, and after flashes alternately
+; ---------------------------------------------------------------------- 
+; 
+; -------------------- Select the project target ----------------------- 
+; 
+ list p=16f877a  ; pic type we are using
+; 
+; -------------------- Program Equates --------------------------------- 
+; 
+status equ 0x03	    ; STATUS register check datasheet
+;trisa equ 0x85	    ; TRISA address on bank 1
+trisb equ 0x86	    ; TRISB address on bank 1
+;porta equ 0x05	    ; PORTA address
+portb equ 0x06	    ; PORTB address
+counter equ 22h	    ; Assign general purpose register
+W equ 0 
+f equ 1 
+; 
+; 
+; --------------------- Main Program ----------------------------------- 
+; 
+ org 0x00 
+; 
+start bsf status,5  ; Select Bank1 
+movlw 0x00	    ; Loading W register with zeros 
+;movwf trisa	    ; Set TRISA to 0 as output
+movwf trisb	    ; Set TRISB to 0 as output
+bcf status,5	    ; Select Bank0 bit clear of 5 to use bank 0
+; 
+; 
+movlw 0x00	    ; Turn off all LEDs 
+;movwf porta
+movwf portb	    ; copy to register file portb
+; 
+; Turn 2 LEDs ON simultaneously
+bsf portb,3	    ;Turn on LED 3 using bit 3
+bsf portb,4	    ; Turn on LED 2 using bit 2
+; 
+; Building a 255 count for the LED delay
+movlw d'255'	;0xff
+movlw counter
+
+; Delay count for 255 to hold High state
+loop0 decfsz counter, 1
+goto loop0
+ 
+; LEDs turned off simultaneously after 255 count
+bcf portb,3	    ; Turn off LED 3
+bcf portb,4	    ; Turn off LED 2
+
+; Delay for 255 count after the 2 LEDs turned off
+movlw d'255' ;0xff
+movlw counter
+ 
+loop decfsz counter, 1
+goto loop
+ 
+; Turn 1 LED on while the other is off
+ledOn bsf portb,3   ; Turn on LED 3
+bcf portb,4	        ; Turn off LED 2
+ 
+; Load counter address with 255 for alternate blink 
+movlw d'255' ;0xff
+movlw counter
+
+; Delay for 255 count after the 2 LEDs turned off
+loop2 decfsz counter, 1
+goto loop2
+
+; Turn another LED on and turn the other off
+bcf portb,3	    ; Turn off LED 3
+bsf portb,4	    ; Turn off LED 2
+goto loop
+ 
+ end
