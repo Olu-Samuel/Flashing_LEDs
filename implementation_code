@@ -6,7 +6,13 @@
 ; 
 ; -------------------- Select the project target ----------------------- 
 ; 
- list p=16f877a  ; pic type we are using
+#include "p16f877a.inc"
+
+; CONFIG
+; __config 0xFF3A
+ __CONFIG _FOSC_HS & _WDTE_OFF & _PWRTE_OFF & _BOREN_OFF & _LVP_OFF & _CPD_OFF & _WRT_OFF & _CP_OFF
+
+list p=16f877a  ; pic type we are using
 ; 
 ; -------------------- Program Equates --------------------------------- 
 ; 
